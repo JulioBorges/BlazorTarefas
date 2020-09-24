@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace BlazorTarefa.Classes
+namespace BlazorTarefa.Entidades
 {
     public class Tarefa
     {
