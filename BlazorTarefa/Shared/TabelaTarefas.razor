@@ -1,0 +1,31 @@
+﻿<table class="table">
+    <thead>
+        <tr>
+            <th>Ação</th>
+            <th>Data</th>
+            <th>Descrição</th>
+            <th>Concluida</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in ListaTarefas)
+        {
+            <tr>
+                <td><button class="btn-danger" @onclick="@(()=> RemoverTarefa(item.ID))"><i class="oi oi-trash"></i></button></td>
+                <td>@item.DataCriacao</td>
+                <td>@item.Descricao</td>
+                <td>
+                    <input type="checkbox" @bind="item.Concluida" />
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+@code {
+    [Parameter]
+    public Action<Guid> RemoverTarefa { get; set; }
+
+    [Parameter]
+    public IEnumerable<Tarefa> ListaTarefas { get; set; }
+}

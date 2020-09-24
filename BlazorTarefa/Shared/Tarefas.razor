@@ -1,0 +1,32 @@
+﻿@if (ListaTarefas == null)
+{
+    <Alerta Mensagem="Carregando..." />
+}
+else if (!ListaTarefas.Any())
+{
+    <Alerta Mensagem="Ainda não existem tarefas" />
+}
+else
+{
+    <h1>Tarefas</h1>
+    <TabelaTarefas ListaTarefas="ListaTarefas" RemoverTarefa="RemoverTarefa"/>
+}
+
+@if (ListaTarefas != null)
+{
+    <NovaTarefa AdicionarNovaTarefa="AdicionarNovaTarefa" />
+}
+
+@code {
+
+    [Parameter]
+    public Action<string> AdicionarNovaTarefa { get; set; }
+
+    [Parameter]
+    public Action<Guid> RemoverTarefa { get; set; }
+
+    [Parameter]
+    public IEnumerable<Tarefa> ListaTarefas { get; set; }
+
+    protected string novaTarefa;
+}

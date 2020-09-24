@@ -1,0 +1,12 @@
+﻿<div class="form-group">
+    <label>Tarefa</label>
+    <input type="text" placeholder="Informe a tarefa" @bind="novaTarefa" />
+    <button class="btn btn-primary" @onclick="@(() => { AdicionarNovaTarefa(novaTarefa); novaTarefa = ""; })">Registrar tarefa</button>
+</div>
+
+@code {
+    [Parameter]
+    public Action<string> AdicionarNovaTarefa { get; set; }
+
+    protected string novaTarefa;
+}

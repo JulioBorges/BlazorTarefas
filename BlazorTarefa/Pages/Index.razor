@@ -1,50 +1,7 @@
 ﻿@page "/"
 @inject HttpClient http
 
-@if (tarefas == null)
-{
-    <p>Carregando...</p>
-}
-else if (!tarefas.Any())
-{
-    <p>Ainda não existem tarefas</p>
-}
-else
-{
-    <h1>Tarefas</h1>
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Ação</th>
-                <th>Data</th>
-                <th>Descrição</th>
-                <th>Concluida</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var item in tarefas)
-            {
-            <tr>
-                <td><button class="btn-danger" @onclick="@(()=> RemoveTarefa(item.ID))"><i class="oi oi-trash"></i></button></td>
-                <td>@item.DataCriacao</td>
-                <td>@item.Descricao</td>
-                <td>
-                    <input type="checkbox" @bind="item.Concluida" />
-                </td>
-            </tr>
-            }
-        </tbody>
-    </table>
-}
-
-@if (tarefas != null)
-{
-    <div class="form-group">
-        <label>Tarefa</label>
-        <input type="text" placeholder="Informe a tarefa" @bind="novaTarefa" />
-        <button class="btn btn-primary" @onclick="AdicionarNovaTarefa">Registrar tarefa</button>
-    </div>
-}
+<Tarefas ListaTarefas="tarefas" AdicionarNovaTarefa="@((tarefa) => AdicionarNovaTarefa(tarefa))" RemoverTarefa="@((id) => RemoverTarefa(id))"/>
 
 @code
 {
@@ -53,20 +10,11 @@ else
         tarefas = await http.GetFromJsonAsync<List<Tarefa>>("dados/tarefas.json");
     }
 
-    public class Tarefa
-    {
-        public Guid ID { get; set; }
-        public string Descricao { get; set; }
-        public bool Concluida { get; set; }
-        public DateTime DataCriacao { get; set; }
-    }
-
-    private string novaTarefa = "";
-
     private List<Tarefa> tarefas = new List<Tarefa>();
 
-    void AdicionarNovaTarefa()
+    void AdicionarNovaTarefa(string novaTarefa)
     {
+        Console.WriteLine("Add");
         if (!string.IsNullOrWhiteSpace(novaTarefa))
         {
             tarefas.Add(new Tarefa
@@ -76,12 +24,13 @@ else
                 ID = Guid.NewGuid()
             });
 
-            novaTarefa = string.Empty;
+            StateHasChanged();
         }
     }
 
-    void RemoveTarefa(Guid id)
+    void RemoverTarefa(Guid id)
     {
         tarefas.Remove(tarefas.First(o => o.ID == id));
+        StateHasChanged();
     }
 }
